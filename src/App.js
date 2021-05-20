@@ -1,9 +1,13 @@
-import './App.css';
+import { Provider } from "react-redux";
+import Todos from "./modules/todos/components/Todos";
+
+import store from "./store/store";
 
 function App() {
   return (
-    <div className="App">
-    </div>
+    <Provider store={store}>
+      <Todos />
+    </Provider>
   );
 }
 
