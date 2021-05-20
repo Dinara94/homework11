@@ -1,48 +1,52 @@
-import { CREATE, DELETE, UPDATE } from "../actions/actions";
+import {
+  TODOS_REMOVE_TODO,
+  TODOS_TOGGLE_TODO,
+  TODOS_ADD_TODO,
+  TODOS_SET_TODOS,
+  TODOS_UPDATE_TODO,
+} from '../actions/actions';
 
-const INITIAL_STATE = {
-  list: [
-    {
-      id: 2,
-      title: "Complete homework regarding Redux",
-      completed: true,
-    },
-    {
-      id: 3,
-      title: "Do a daily yoga lesson",
-      completed: false,
-    },
-    {
-      id: 4,
-      title: "Make a research for work",
-      completed: true,
-    },
-  ],
+const initialState = {
+  items: [],
 };
 
-export default function reducers(state = INITIAL_STATE, { type, payload }) {
+export default function reducers(state = initialState, { type, payload }) {
   switch (type) {
-    case DELETE:
-      return {
-        ...state,
-        list: state.list.filter((item) => item.id !== payload),
-      };
+      case TODOS_REMOVE_TODO:
+          return {
+              ...state,
+              items: state.items.filter((todo) => todo.id !== payload),
+          };
+      case TODOS_TOGGLE_TODO:
+          return {
+              ...state,
+              items: state.items.map((todo) =>
+                  todo.id !== payload
+                      ? todo
+                      : { ...todo, isDone: !todo.isDone }
+              ),
+          };
+      case TODOS_ADD_TODO:
+          const newItem = { id: Date.now(), ...payload };
 
-    case UPDATE: {
-      const item = state.list.find((element) => element.id === payload);
-      const newItem = { ...item, completed: !item.completed };
-      return {
-        ...state,
-        list: state.list.map((item) => (item.id !== payload ? item : newItem)),
-      };
-    }
+          return {
+              ...state,
+              items: [...state.items, newItem],
+          };
 
-    case CREATE:
-      return {
-        ...state,
-        list: [...state.list, payload],
-      };
-    default:
-      return state;
+      case TODOS_SET_TODOS:
+          return {
+              items: payload,
+          };
+
+      case TODOS_UPDATE_TODO:
+          return {
+              items: state.items.map((todo) =>
+                  todo.id !== payload.id ? todo : payload
+              ),
+          };
+
+      default:
+          return state;
   }
 }

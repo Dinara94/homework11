@@ -1,8 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import TodoForm from "./TodoForm";
+import { Link } from 'react-router-dom';
 import TodoListItem from "./TodoListItem";
 import { Typography, Container } from "@material-ui/core";
+import TodoForm from "./modules/todos/components/TodoForm";
+
 
 function Todos({ todos, dispatch }) {
   return (
@@ -15,7 +17,10 @@ function Todos({ todos, dispatch }) {
           ))}
         </ul>
       </Container>
-      <TodoForm dispatch={dispatch}/>
+      <Button component={Link} to="/list/add">
+      Add new
+      </Button>
+      <Route path={`${path}/add`} component={TodoForm} />
     </>
   );
 }
